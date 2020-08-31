@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    </script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"> 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body {
+        padding: 15px;
+        min-width: 900px;
+        max-width: 900px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #head {
+        background-color: #3390ff;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        padding-left: 20px;
+        border: 1px solid rgb(134, 134, 134);
+        color: white;
+        font-weight: 700;
+    }
+
+
+    .bodyPage {
+        border: 1px solid rgb(134, 134, 134);
+    }
+
+    .headerPage {
+        display: flex;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        background-color: rgb(241, 240, 240);
+        border-bottom: 1px solid rgb(134, 134, 134);
+
+    }
+
+    .homePage,
+    .liveReports,
+    .About {
+        width: 105px;
+        text-align: center;
+        color: white;
+        background-color: #3390ff;
+        border-radius: 5px;
+        margin-left: 20px;
+        padding-top: 5px;
+        height: 30px;
+
+    }
+
+    .homePage:hover,
+    .liveReports:hover,
+    .About:hover,
+    .btnSubmit:hover,
+    .btnCss:hover {
+        background-color: #006ef5;
+    }
+
+    .serchCoins {
+        margin-left: 200px;
+        color: #006ef5;
+    }
+
+    .btnSubmit {
+        color: white;
+        background-color: #3390ff;
+    }
+
+    .rowBody {
+        display: flex;
+    }
+
+    .innerRowBody {
+        border: 1px solid #3390ff;
+        width: 100%;
+        height: 120px;
+    }
+
+    .cardCss {
+        background-color: white;
+        color: rgb(32, 32, 32);
+        width: 300px;
+        border: 1px solid rgb(134, 134, 134);
+    }
+    
+    #moreInfiBtn{
+        background-color: #3390ff ;
+        color: white;
+        margin-left: 20px;
+    }
+
+    ul{
+        margin-left: -20px;
+    }
+
+    .content{
+        display: none;
+        margin-left: 20px;
+    }
+
+        #container{
+        display: grid;
+        grid-template-columns: 285px 285px 285px;
+        }
+
+        #ctnCss{
+            background-color: #3390ff;
+            border-radius: 5px;
+            color:white;
+            margin-left: 20px;
+            width: 100px;
+            height: 40px;
+        }
+
+        #pCssInBox{
+            margin-left: 20px;
+        }
+
+        .toggle{
+            background-color: red;
+        }
+
+        .btnCss{
+            background-color: #3390ff;
+            color: white;
+            border-radius: 5px;
+            height: 40px;
+            width: 110px;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+</style>
+
+<body>
+    <h1 id="head">Cryptonite</h1>
+    <p></p>
+    <div class="bodyPage">
+        <div class="headerPage">
+            <div type="button" class="homePage" id="show" onclick="startApp()">Home</div>
+            <div type="button" class="liveReports" id="live" onclick="live()">Live Reports</div>
+            <div type="button" class="About" id="aboutMe" onclick="showDetails()">About</div>
+            <input type="text" id="name" class="serchCoins" placeholder="Search..."></input>
+            <button type="submit" id="searachCoinsBtn" class="btnSubmit" onclick="search()">Search</button>
+        </div>
+
+        <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch1">
+            <label class="custom-control-label" for="customSwitch1"></label>
+        </div>
+
+    </div>
+    <div id="container"></div>
+
+    <script>
+
+        async function startApp() {
+            const url = 'https://api.coingecko.com/api/v3/coins/list'
+            let response = await fetch(url)
+            let coins = await response.json();
+            showAll(coins)
+        }
+
+        async function showAll(coins) {
+            let i = 0;
+            for (const coin of coins) {
+                if (i >= 9) {
+                    break;
+                }
+                drawCoins(coin);
+                i++
+            }
+        }
+        
+        function drawCoins(coin) {
+            $('#container').show()
+            let element = $(`<div class="cardCss"=${coin.name}</div>`)
+            element.append(`<div class=innerCardCss><ul><span style = 'color: #3390ff'>Symbol:</span>${coin.symbol}</ul>
+                                <ul><span style = 'color: #3390ff'>Id:</span>${coin.id}</ul>
+                                <ul><span style = 'color: #3390ff'>Name:</span>${coin.name}</ul>
+                                <div id="accordion">
+                                    <button class="btnCss">More info</button>
+                                    <div>
+                                    <p><img src="${coin.image.small}"</p>
+                                </div>
+                                </div>`)
+                    $('#container').append(element) 
+            
+                    $( function() {
+                    $( "#accordion" ).accordion({
+                    collapsible: true
+                    });
+                } );
+
+        }
+
+        async function search() {
+            let input = document.getElementById('name').value
+            let response = await fetch(`https://api.coingecko.com/api/v3/coins/${input}`)
+            let coin = await response.json();
+            drawCoins(coin)
+        }
+
+        async function moreInfo(event) {
+            let x = event.target
+            let response = await fetch('https://api.coingecko.com/api/v3/coins/list')
+            let coin = await response.json();
+            drawInfo(coin)
+        }
+
+        function drawInfo(event) {
+            try {
+                showAll(coins)
+                let element = $('<div class="infoDiv"></div>')
+                $(`class=${coin.name}`).toggleClass('container')
+                element.append(`<h1> ${coin.name}</h1>`)
+                element.append(`<h1>${coin.id}</h1>`)
+            } catch{
+                alert('something went wrong')
+            }
+        }
+
+
+
+</script>
+</body>
+
+</html>
